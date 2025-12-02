@@ -1,70 +1,72 @@
 ---
 interface Props {
   recipe: {
-    _id: string;
-    name: string;
+    _id: string
+    name: string
     slug: {
-      current: string;
-    };
-    description?: string;
-    imageUrl?: string;
-    rating?: number;
-    timeToCook?: number;
-    uploadDate: string;
-  };
+      current: string
+    }
+    description?: string
+    imageUrl?: string
+    rating?: number
+    timeToCook?: number
+    uploadDate: string
+  }
 }
 
 const { recipe } = Astro.props;
 ---
 
-<article class="border rounded-lg overflow-hidden hover:shadow-xl transition-shadow bg-white">
-  <a href={`/recipes/${recipe.slug.current}`} class="block group">
-    {recipe.imageUrl ? (
+<article class="overflow-hidden rounded-lg border bg-white transition-shadow hover:shadow-xl">
+  <a href={`/recipes/${recipe.slug.current}`} class="group block">
+    {recipe.imageUrl
+? (
       <div class="relative h-48 overflow-hidden bg-gray-200">
-        <img 
-          src={recipe.imageUrl} 
+        <img
+          src={recipe.imageUrl}
           alt={recipe.name}
-          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          class="size-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>
-    ) : (
-      <div class="h-48 bg-linear-to-br from-orange-100 to-orange-200 flex items-center justify-center">
+    )
+: (
+      <div class="bg-linear-to-br flex h-48 items-center justify-center from-orange-100 to-orange-200">
         <span class="text-6xl">🍽️</span>
       </div>
     )}
-    
+
     <div class="p-6">
-      <h2 class="text-2xl font-bold mb-2 group-hover:text-orange-600 transition-colors">
+      <h2 class="mb-2 text-2xl font-bold transition-colors group-hover:text-orange-600">
         {recipe.name}
       </h2>
-      
+
       {recipe.description && (
-        <p class="text-gray-600 mb-4 line-clamp-2">
+        <p class="mb-4 line-clamp-2 text-gray-600">
           {recipe.description}
         </p>
       )}
-      
+
       <div class="flex flex-wrap gap-3 text-sm text-gray-500">
         {recipe.timeToCook && (
-          <span class="flex items-center gap-1 bg-orange-50 px-3 py-1 rounded-full">
+          <span class="flex items-center gap-1 rounded-full bg-orange-50 px-3 py-1">
             <span class="text-orange-500">⏱️</span>
             {recipe.timeToCook} min
           </span>
         )}
-        
+
         {recipe.rating && (
-          <span class="flex items-center gap-1 bg-yellow-50 px-3 py-1 rounded-full">
+          <span class="flex items-center gap-1 rounded-full bg-yellow-50 px-3 py-1">
             <span class="text-yellow-500">⭐</span>
             {recipe.rating}/5
           </span>
         )}
-        
-        <span class="flex items-center gap-1 bg-gray-50 px-3 py-1 rounded-full">
+
+        <span class="flex items-center gap-1 rounded-full bg-gray-50 px-3 py-1">
           <span>📅</span>
           {new Date(recipe.uploadDate).toLocaleDateString('nl-NL', {
             year: 'numeric',
             month: 'short',
-            day: 'numeric'
+            day: 'numeric',
           })}
         </span>
       </div>

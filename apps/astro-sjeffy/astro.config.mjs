@@ -1,7 +1,7 @@
-import tailwindcss from "@tailwindcss/vite";
-import { defineConfig } from "astro/config";
+import sanity from '@sanity/astro'
+import tailwindcss from '@tailwindcss/vite'
 
-import sanity from "@sanity/astro";
+import { defineConfig } from 'astro/config'
 
 export default defineConfig({
   vite: {
@@ -9,10 +9,10 @@ export default defineConfig({
   },
   integrations: [
     sanity({
-      projectId: "j4tm46xz",
-      dataset: "sjeffy-dataset",
+      projectId: 'j4tm46xz',
+      dataset: 'sjeffy-dataset',
       useCdn: false,
-      studioBasePath: "/studio",
+      studioBasePath: '/studio',
     }),
   ],
-});
+})

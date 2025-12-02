@@ -1,3 +1,3 @@
-import { recipeType } from "./recipeType"
+import { recipeType } from './recipeType'
 
 export const schemaTypes = [recipeType]

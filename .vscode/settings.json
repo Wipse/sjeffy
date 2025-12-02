@@ -1,0 +1,49 @@
+{
+  // ESLint
+  "eslint.enable": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "astro",
+    "html",
+    "markdown",
+    "json",
+    "jsonc"
+  ],
+
+  // Disable default format on save (we use ESLint instead)
+  "editor.formatOnSave": false,
+
+  // Auto fix on save with ESLint (includes formatting)
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+
+  // Astro - use ESLint for formatting
+  "[astro]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": false
+  },
+
+  // TypeScript - use ESLint
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+
+  // JSON - use ESLint
+  "[json]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+
+  // Tailwind
+  "tailwindCSS.experimental.classRegex": [
+    ["class:\\s*?[\"'`]([^\"'`]*).*?[\"'`]", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ],
+
+  // Files
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
+}

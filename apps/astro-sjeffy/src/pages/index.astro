@@ -1,20 +1,20 @@
 ---
-import { sanityClient } from "sanity:client";
-import RecipeCard from '../components/RecipeCard.astro';
-import '../styles/global.css';
+import { sanityClient } from 'sanity:client'
+import RecipeCard from '../components/RecipeCard.astro'
+import '../styles/global.css'
 
 interface Recipe {
-  _id: string;
-  name: string;
+  _id: string
+  name: string
   slug: {
-    current: string;
-  };
-  description?: string;
-  imageUrl?: string;
-  ingredients?: string[];
-  rating?: number;
-  timeToCook?: number;
-  uploadDate: string;
+    current: string
+  }
+  description?: string
+  imageUrl?: string
+  ingredients?: string[]
+  rating?: number
+  timeToCook?: number
+  uploadDate: string
 }
 
 const RECIPES_QUERY = `*[
@@ -30,7 +30,7 @@ const RECIPES_QUERY = `*[
   rating,
   timeToCook,
   uploadDate
-}`;
+}`
 
 const recipes = await sanityClient.fetch<Recipe[]>(RECIPES_QUERY);
 ---
@@ -44,40 +44,42 @@ const recipes = await sanityClient.fetch<Recipe[]>(RECIPES_QUERY);
   <title>Sjeffy - Recepten</title>
 </head>
 <body>
-  <main class="bg-linear-to-br from-orange-50 to-white min-h-screen">
+  <main class="bg-linear-to-br min-h-screen from-orange-50 to-white">
     <div class="container mx-auto max-w-7xl px-4 py-12">
       {/* Header */}
       <header class="mb-12 text-center">
-        <h1 class="text-5xl font-bold mb-4 bg-linear-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+        <h1 class="bg-linear-to-r mb-4 from-orange-600 to-red-600 bg-clip-text text-5xl font-bold text-transparent">
           🍽️ Sjeffy's Recepten
         </h1>
-        <p class="text-gray-600 text-lg">
+        <p class="text-lg text-gray-600">
           Ontdek heerlijke recepten voor elke gelegenheid
         </p>
       </header>
 
       {/* Debug panel (verwijder dit later) */}
-      <details class="mb-8 bg-white rounded-lg p-4 shadow">
+      <details class="mb-8 rounded-lg bg-white p-4 shadow">
         <summary class="cursor-pointer font-semibold text-gray-700 hover:text-orange-600">
           🔍 Debug Data (klik om te tonen)
         </summary>
-        <pre class="mt-4 bg-gray-100 p-4 rounded overflow-auto text-xs">
+        <pre class="mt-4 overflow-auto rounded bg-gray-100 p-4 text-xs">
           {JSON.stringify(recipes, null, 2)}
         </pre>
       </details>
 
       {/* Recipe Grid */}
-      {recipes.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {recipes.map((recipe) => (
+      {recipes.length > 0
+? (
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {recipes.map(recipe => (
             <RecipeCard recipe={recipe} />
           ))}
         </div>
-      ) : (
-        <div class="text-center py-16">
-          <p class="text-xl text-gray-500 mb-4">Nog geen recepten gevonden</p>
+      )
+: (
+        <div class="py-16 text-center">
+          <p class="mb-4 text-xl text-gray-500">Nog geen recepten gevonden</p>
           <p class="text-gray-400">
-            Voeg recepten toe via de Sanity Studio op 
+            Voeg recepten toe via de Sanity Studio op
             <a href="http://localhost:3333" class="text-orange-600 hover:underline">
               localhost:3333
             </a>
