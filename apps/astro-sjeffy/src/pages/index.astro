@@ -1,0 +1,90 @@
+---
+import { sanityClient } from "sanity:client";
+import RecipeCard from '../components/RecipeCard.astro';
+import '../styles/global.css';
+
+interface Recipe {
+  _id: string;
+  name: string;
+  slug: {
+    current: string;
+  };
+  description?: string;
+  imageUrl?: string;
+  ingredients?: string[];
+  rating?: number;
+  timeToCook?: number;
+  uploadDate: string;
+}
+
+const RECIPES_QUERY = `*[
+  _type == "recipe"
+  && defined(slug.current)
+]|order(uploadDate desc)[0...12]{
+  _id,
+  name,
+  slug,
+  description,
+  "imageUrl": image.asset->url,
+  ingredients,
+  rating,
+  timeToCook,
+  uploadDate
+}`;
+
+const recipes = await sanityClient.fetch<Recipe[]>(RECIPES_QUERY);
+---
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>Sjeffy - Recepten</title>
+</head>
+<body>
+  <main class="bg-linear-to-br from-orange-50 to-white min-h-screen">
+    <div class="container mx-auto max-w-7xl px-4 py-12">
+      {/* Header */}
+      <header class="mb-12 text-center">
+        <h1 class="text-5xl font-bold mb-4 bg-linear-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+          🍽️ Sjeffy's Recepten
+        </h1>
+        <p class="text-gray-600 text-lg">
+          Ontdek heerlijke recepten voor elke gelegenheid
+        </p>
+      </header>
+
+      {/* Debug panel (verwijder dit later) */}
+      <details class="mb-8 bg-white rounded-lg p-4 shadow">
+        <summary class="cursor-pointer font-semibold text-gray-700 hover:text-orange-600">
+          🔍 Debug Data (klik om te tonen)
+        </summary>
+        <pre class="mt-4 bg-gray-100 p-4 rounded overflow-auto text-xs">
+          {JSON.stringify(recipes, null, 2)}
+        </pre>
+      </details>
+
+      {/* Recipe Grid */}
+      {recipes.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {recipes.map((recipe) => (
+            <RecipeCard recipe={recipe} />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-16">
+          <p class="text-xl text-gray-500 mb-4">Nog geen recepten gevonden</p>
+          <p class="text-gray-400">
+            Voeg recepten toe via de Sanity Studio op 
+            <a href="http://localhost:3333" class="text-orange-600 hover:underline">
+              localhost:3333
+            </a>
+          </p>
+        </div>
+      )}
+    </div>
+  </main>
+</body>
+</html>
