@@ -1,7 +1,13 @@
 ---
 import '../styles/global.css'
 
-const { content } = Astro.props
+interface Props {
+  content: {
+    title: string
+  }
+}
+
+const { content } = Astro.props as Props
 ---
 
 <html lang="en">

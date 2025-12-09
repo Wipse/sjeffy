@@ -1,0 +1,21 @@
+---
+interface Props {
+  color?: 'primary' | 'secondary'
+}
+
+const { color = 'primary' } = Astro.props
+---
+
+<div class:list={[
+  'rounded-full px-2 py-0.5 text-white w-fit',
+  color === 'primary' ? 'bg-primary-50' : 'bg-secondary-50',
+]}
+>
+  <span class:list={[
+    'text-sm text-gray-500',
+    color === 'primary' ? 'text-primary-800' : 'text-secondary-800',
+  ]}
+  >
+    <slot />
+  </span>
+</div>

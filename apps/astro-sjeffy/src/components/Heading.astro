@@ -1,0 +1,79 @@
+---
+// Mapping of font sizes to Tailwind CSS classes
+const sizeClasses = {
+  'display-8xl': 'text-display-8xl',
+  'display-7xl': 'text-display-7xl',
+  'display-6xl': 'text-display-6xl',
+  'display-5xl': 'text-display-5xl',
+  'display-4xl': 'text-display-4xl',
+  'display-3xl': 'text-display-3xl',
+  'display-2xl': 'text-display-2xl',
+  'display-xl': 'text-display-xl',
+  'display-lg': 'text-display-lg',
+  'display-md': 'text-display-md',
+  'display-sm': 'text-display-sm',
+
+  'body-4xl': 'text-body-4xl',
+  'body-3xl': 'text-body-3xl',
+  'body-2xl': 'text-body-2xl',
+  'body-xl': 'text-body-xl',
+  'body-lg': 'text-body-lg',
+  'body-md': 'text-body-md',
+  'body-sm': 'text-body-sm',
+  'body-xs': 'text-body-xs',
+} as const
+
+type FontSize = keyof typeof sizeClasses
+
+interface Props {
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span'
+  size?: FontSize
+  icon?: string
+  iconSize?: number
+  iconColor?: string
+  class?: string
+}
+
+const {
+  as = 'h2',
+  size = 'display-lg',
+  icon,
+  iconSize = 32,
+  iconColor = 'text-primary-500',
+  class: additionalClasses = '',
+} = Astro.props as Props
+
+// Compute the CSS classes for the heading element
+const headingClasses = [
+  'text-balance',
+  'font-semibold',
+  sizeClasses[size],
+  additionalClasses,
+].filter(Boolean).join(' ')
+---
+
+<div class="flex items-center gap-x-3">
+  <!-- Add the icon if it is defined -->
+  {icon && (
+    <svg
+      class={`${iconColor}`}
+      style={`width: ${iconSize}px; height: ${iconSize}px;`}
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <!-- Placeholder icon - je kunt dit vervangen met een icon library -->
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+    </svg>
+  )}
+
+<!-- Define the heading elements based on the 'as' prop -->
+  {as === 'h1' && <h1 class={headingClasses}><slot /></h1>}
+  {as === 'h2' && <h2 class={headingClasses}><slot /></h2>}
+  {as === 'h3' && <h3 class={headingClasses}><slot /></h3>}
+  {as === 'h4' && <h4 class={headingClasses}><slot /></h4>}
+  {as === 'h5' && <h5 class={headingClasses}><slot /></h5>}
+  {as === 'h6' && <h6 class={headingClasses}><slot /></h6>}
+  {as === 'span' && <span class={headingClasses}><slot /></span>}
+</div>

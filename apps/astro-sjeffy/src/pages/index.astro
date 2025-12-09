@@ -1,38 +1,9 @@
 ---
-import { sanityClient } from 'sanity:client'
-import RecipeCard from '../components/RecipeCard.astro'
+import BasicCard from '../components/cards/Basic.astro'
+import { getAllRecipes } from '../queries'
 import '../styles/global.css'
 
-interface Recipe {
-  _id: string
-  name: string
-  slug: {
-    current: string
-  }
-  description?: string
-  imageUrl?: string
-  ingredients?: string[]
-  rating?: number
-  timeToCook?: number
-  uploadDate: string
-}
-
-const RECIPES_QUERY = `*[
-  _type == "recipe"
-  && defined(slug.current)
-]|order(uploadDate desc)[0...12]{
-  _id,
-  name,
-  slug,
-  description,
-  "imageUrl": image.asset->url,
-  ingredients,
-  rating,
-  timeToCook,
-  uploadDate
-}`
-
-const recipes = await sanityClient.fetch<Recipe[]>(RECIPES_QUERY);
+const recipes = await getAllRecipes()
 ---
 
 <!DOCTYPE html>
@@ -44,11 +15,11 @@ const recipes = await sanityClient.fetch<Recipe[]>(RECIPES_QUERY);
   <title>Sjeffy - Recepten</title>
 </head>
 <body>
-  <main class="bg-linear-to-br min-h-screen from-orange-50 to-white">
+  <main class="bg-linear-to-br from-primary-50/50 min-h-screen to-white">
     <div class="container mx-auto max-w-7xl px-4 py-12">
       {/* Header */}
       <header class="mb-12 text-center">
-        <h1 class="bg-linear-to-r mb-4 from-orange-600 to-red-600 bg-clip-text text-5xl font-bold text-transparent">
+        <h1 class="text-primary-500 mb-4 text-5xl font-bold">
           🍽️ Sjeffy's Recepten
         </h1>
         <p class="text-lg text-gray-600">
@@ -58,7 +29,7 @@ const recipes = await sanityClient.fetch<Recipe[]>(RECIPES_QUERY);
 
       {/* Debug panel (verwijder dit later) */}
       <details class="mb-8 rounded-lg bg-white p-4 shadow">
-        <summary class="cursor-pointer font-semibold text-gray-700 hover:text-orange-600">
+        <summary class="hover:text-primary-600 cursor-pointer font-semibold text-gray-700">
           🔍 Debug Data (klik om te tonen)
         </summary>
         <pre class="mt-4 overflow-auto rounded bg-gray-100 p-4 text-xs">
@@ -71,7 +42,7 @@ const recipes = await sanityClient.fetch<Recipe[]>(RECIPES_QUERY);
 ? (
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {recipes.map(recipe => (
-            <RecipeCard recipe={recipe} />
+            <BasicCard recipe={recipe} />
           ))}
         </div>
       )
@@ -80,7 +51,7 @@ const recipes = await sanityClient.fetch<Recipe[]>(RECIPES_QUERY);
           <p class="mb-4 text-xl text-gray-500">Nog geen recepten gevonden</p>
           <p class="text-gray-400">
             Voeg recepten toe via de Sanity Studio op
-            <a href="http://localhost:3333" class="text-orange-600 hover:underline">
+            <a href="http://localhost:3333" class="text-primary-600 hover:underline">
               localhost:3333
             </a>
           </p>

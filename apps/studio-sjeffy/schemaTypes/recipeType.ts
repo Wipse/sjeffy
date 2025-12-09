@@ -34,6 +34,13 @@ export const recipeType = defineType({
       description: 'Upload een smakelijke foto van je afgewerkte gerecht',
     }),
     defineField({
+      name: 'categories',
+      title: 'Categorieën',
+      type: 'array',
+      of: [{type: 'reference', to: {type: 'category'}}],
+      description: 'Selecteer de categorieën waar dit recept bij hoort',
+    }),
+    defineField({
       name: 'ingredients',
       title: 'Ingrediënten',
       type: 'array',
