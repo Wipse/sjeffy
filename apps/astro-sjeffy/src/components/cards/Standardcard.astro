@@ -1,0 +1,98 @@
+---
+import type { Recipe } from '../../types'
+import { formatCookTime } from '../../utils/formatCookTime'
+import Heading from '../Heading.astro'
+import Label from '../Label.astro'
+
+interface Props {
+  recipe: Recipe
+  exclude?: 'description' | 'rating' | 'timeToCook'
+  color?: 'primary' | 'secondary'
+  interactiveLabels?: boolean
+}
+
+const { recipe, color = 'primary', interactiveLabels = false } = Astro.props
+---
+<a
+  href={`/recepten/${recipe.slug.current}`}
+  class="focus:ring-primary-500 max-w-130 block min-w-80 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-4"
+>
+  <article class="group gap-y-4">
+    <!-- Image -->
+    <div>
+      {recipe.mainImageUrl
+        ? (
+          <div class="overflow-hidden rounded-lg">
+            <img
+              src={recipe.mainImageUrl}
+              alt={recipe.name}
+              class="h-60 w-full rounded-lg object-cover transition-all duration-300 group-hover:scale-105"
+            />
+          </div>
+        )
+     : (
+        <div class="overflow-hidden rounded-lg">
+          <img
+            src="https://placehold.co/600x400"
+            alt="Placeholder"
+            class="h-60 w-full rounded-lg object-cover transition-all duration-300 group-hover:scale-105"
+          />
+        </div>
+      )}
+    </div>
+
+    <!-- Content -->
+    <div class="flex flex-col gap-y-1 p-4">
+      {recipe.categories && recipe.categories.length > 0 && (
+        <div class="mb-1 flex flex-wrap gap-2">
+          {recipe.categories.map(category => (
+            <Label
+              color="primary"
+              slug={interactiveLabels ? category.slug.current : undefined}
+            >
+              {category.name}
+            </Label>
+          ))}
+        </div>
+      )}
+      <Heading
+        as="h3"
+        size="display-md"
+        class:list={[
+          'font-bold group-hover:underline',
+          color === 'primary' ? 'text-primary-900' : 'text-secondary-900',
+        ]}
+      >
+        {recipe.name}
+      </Heading>
+
+      {recipe.description && (
+        <p class="leading-5.5 line-clamp-2 text-gray-700">
+          {recipe.description}
+        </p>
+      )}
+
+      <!-- Data container -->
+      <div class="mt-2 flex flex-col gap-y-2">
+        {recipe.timeToCook && (
+          <div class="flex items-center gap-x-1">
+            <!-- TODO: Add icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{formatCookTime(recipe.timeToCook)}</span>
+          </div>
+        )}
+        {recipe.rating && (
+          <div class="flex items-center gap-x-1">
+             <!-- TODO: Add icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{recipe.rating} sterren</span>
+          </div>
+        )}
+      </div>
+    </div>
+  </article>
+</a>

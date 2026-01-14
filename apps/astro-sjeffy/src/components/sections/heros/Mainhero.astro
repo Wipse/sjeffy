@@ -1,0 +1,17 @@
+---
+import Heading from '../../Heading.astro'
+import Searchbar from '../../Searchbar.astro'
+
+interface Props {
+  title: string
+}
+
+const { title } = Astro.props
+---
+
+<section class="py-section-xl bg-primary-50">
+  <div class="container mx-auto flex flex-col gap-y-4">
+    <Heading size="display-2xl" as="h1" class="text-primary-600">{title}</Heading>
+    <Searchbar />
+  </div>
+</section>

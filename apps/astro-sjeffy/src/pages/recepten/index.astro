@@ -1,0 +1,44 @@
+---
+import Standardcard from '../../components/cards/Standardcard.astro'
+import Layout from '../../layouts/main.astro'
+import { getAllRecipes } from '../../queries'
+
+const recipes = await getAllRecipes()
+---
+
+<Layout title="Alle Recepten | Sjeffy" description="Browse door alle heerlijke recepten">
+  <main class="bg-linear-to-br from-primary-50/50 min-h-screen to-white">
+    <div class="container mx-auto max-w-7xl px-4 py-12">
+      <!-- Header -->
+      <header class="mb-12 text-center">
+        <h1 class="text-primary-500 mb-4 text-5xl font-bold">
+          📚 Alle Recepten
+        </h1>
+        <p class="text-lg text-gray-600">
+          Browse door onze complete recepten bibliotheek
+        </p>
+      </header>
+
+      <!-- Recipe Grid -->
+      {recipes.length > 0
+        ? (
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {recipes.map(recipe => (
+            <Standardcard recipe={recipe} />
+          ))}
+        </div>
+        )
+        : (
+        <div class="py-16 text-center">
+          <p class="mb-4 text-xl text-gray-500">Nog geen recepten gevonden</p>
+          <p class="text-gray-400">
+            Voeg recepten toe via de Sanity Studio op
+            <a href="http://localhost:3333" class="text-primary-600 hover:underline">
+              localhost:3333
+            </a>
+          </p>
+        </div>
+      )}
+    </div>
+  </main>
+</Layout>

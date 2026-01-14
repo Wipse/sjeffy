@@ -1,0 +1,57 @@
+---
+interface Props {
+  id: string
+}
+
+const { id } = Astro.props
+---
+
+<div class="checkbox-wrapper relative flex items-center gap-2">
+    <input
+      type="checkbox"
+      id={id}
+      data-checkbox-id={id}
+      class="checkbox-input border-secondary-500 peer size-6 cursor-pointer appearance-none rounded-sm border-[0.156rem] bg-white transition-all duration-200"
+    />
+    <img
+      src="/checkmark.svg"
+      alt="checkmark"
+      class="pointer-events-none absolute left-0.5 size-7 opacity-0 transition-opacity duration-200 peer-checked:opacity-100"
+    />
+</div>
+
+<style>
+  .checkbox-wrapper:has(input:active) {
+    transform: scale(1.1);
+  }
+
+  .checkbox-wrapper {
+    transition: transform 200ms ease-in-out;
+  }
+</style>
+
+<script>
+// Load and save checkbox state from localStorage
+document.addEventListener('DOMContentLoaded', () => {
+  const checkboxes = document.querySelectorAll('.checkbox-input') as NodeListOf<HTMLInputElement>
+
+  checkboxes.forEach((checkbox) => {
+    const id = checkbox.getAttribute('data-checkbox-id')
+    if (!id)
+      return
+
+    const storageKey = `checkbox-${id}`
+
+    // Load saved state
+    const savedState = localStorage.getItem(storageKey)
+    if (savedState === 'true') {
+      checkbox.checked = true
+    }
+
+    // Save state on change
+    checkbox.addEventListener('change', () => {
+      localStorage.setItem(storageKey, checkbox.checked.toString())
+    })
+  })
+})
+</script>

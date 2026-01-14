@@ -1,0 +1,55 @@
+---
+import type { Recipe } from '../../../types/recipe'
+import { formatCookTime } from '../../../utils/formatCookTime'
+import Heading from '../../Heading.astro'
+
+interface Props {
+  data: Recipe
+}
+
+const { data } = Astro.props
+
+const formattedCooktime = formatCookTime(data.timeToCook)
+---
+
+<section class="relative">
+  <!-- Background image -->
+   {data.mainImageUrl
+? (
+  <img
+    class="bg-primary-500 absolute inset-0 z-0 h-[50vh] w-full rounded-b-3xl object-cover"
+    src={data.mainImageUrl}
+    alt={data.name}
+  />
+  )
+: (
+    <div class="bg-primary-500 absolute inset-0 z-0 h-[50vh] w-full rounded-b-3xl" />
+  )}
+
+  <!-- Content -->
+  <div class="container relative z-10 mx-auto">
+    <div class="flex h-screen items-center justify-center">
+      <div class="rounded-4xl flex w-full flex-col items-center justify-center gap-y-2 bg-white px-5 py-6 shadow-xl">
+        <Heading size="display-xl" as="h1" class="text-primary-900 text-center">{data.name}</Heading>
+        <p class="text-gray-400">{data.ingredients?.length} ingrediënten</p>
+        <ul class="text-primary-900 mt-4 flex w-full items-center justify-evenly">
+          <li>
+            <span>
+              {formattedCooktime}
+            </span>
+          </li>
+          <li>
+            <span>
+              {data.servings} {data.servingsType || 'porties'}
+            </span>
+          </li>
+          <li>
+            <span>
+              {data.rating} sterren
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

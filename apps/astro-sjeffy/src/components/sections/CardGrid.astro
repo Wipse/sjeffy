@@ -1,0 +1,25 @@
+---
+import type { Recipe } from '../../types/recipe'
+import Standardcard from '../cards/Standardcard.astro'
+import Heading from '../Heading.astro'
+
+interface Props {
+    headingText: string
+    recipes: Recipe[]
+    interactiveLabels?: boolean
+}
+
+const { headingText, recipes, interactiveLabels = false } = Astro.props
+---
+
+<section class="py-section-md container">
+    <Heading size="display-2xl" as="h2" class="text-primary-600 mb-6">{headingText}</Heading>
+    <div class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
+        {recipes.map(recipe => (
+            <Standardcard
+              recipe={recipe}
+              interactiveLabels={interactiveLabels}
+            />
+        ))}
+    </div>
+</section>

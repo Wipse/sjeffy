@@ -1,0 +1,24 @@
+---
+import checkmark from '../../public/checkmark.svg'
+import favicon from '../../public/favicon.svg'
+import logo from '../../public/icons/logo.svg'
+
+interface Props {
+  name: 'logo' | 'checkmark' | 'favicon'
+  class?: string
+}
+
+const { name } = Astro.props
+
+const icons = {
+  logo: logo.src,
+  checkmark: checkmark.src,
+  favicon: favicon.src,
+}
+
+---
+
+<img
+  src={icons[name]}
+  alt={name}
+/>

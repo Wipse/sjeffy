@@ -1,5 +1,4 @@
-import type { Category } from './category'
-
+import type { Category } from './index'
 /**
  * Recipe type based on Sanity schema
  */
@@ -10,23 +9,20 @@ export interface Recipe {
     current: string
   }
   description?: string
-  imageUrl?: string
+  mainImageUrl?: string
+  additionalImageUrl?: string
   ingredients?: string[]
   rating?: number
   timeToCook?: number
   uploadDate: string
   categories?: Category[]
-}
-
-/**
- * Props for Recipe Card components
- */
-export interface RecipeCardProps {
-  title: string
-  description: string
-  image: string
-  link: string
-  rating?: number
-  timeToCook?: number
-  categories?: Category[]
+  servings?: number
+  servingsType?: string
+  nutrition?: {
+    value: number
+    item: {
+      name: string
+      unit: string
+    }
+  }[]
 }

@@ -1,4 +1,4 @@
-import type { Recipe } from '../types/recipe'
+import type { Recipe } from '../types'
 import { sanityClient } from 'sanity:client'
 
 /**
@@ -13,13 +13,24 @@ export async function getAllRecipes(): Promise<Recipe[]> {
     name,
     slug,
     description,
-    "imageUrl": image.asset->url,
+    "mainImageUrl": mainImage.asset->url,
+    "additionalImageUrl": additionalImages.asset->url,
     ingredients,
     rating,
     timeToCook,
     uploadDate,
     categories[]->{
-      name
+      name,
+      slug
+    },
+    servings,
+    servingsType,
+    nutrition[]{
+      value,
+      item->{
+        name,
+        unit
+      }
     }
   }`
 
@@ -38,13 +49,24 @@ export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
     name,
     slug,
     description,
-    "imageUrl": image.asset->url,
+    "mainImageUrl": mainImage.asset->url,
+    "additionalImageUrl": additionalImages.asset->url,
     ingredients,
     rating,
     timeToCook,
     uploadDate,
     categories[]->{
-      name
+      name,
+      slug
+    },
+    servings,
+    servingsType,
+    nutrition[]{
+      value,
+      item->{
+        name,
+        unit
+      }
     }
   }`
 

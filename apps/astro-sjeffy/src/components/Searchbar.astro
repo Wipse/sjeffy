@@ -1,0 +1,9 @@
+---
+interface Props {
+  placeholder?: string
+}
+
+const { placeholder = 'Zoek een recept...' } = Astro.props
+---
+
+<input type="text" placeholder={placeholder} class="focus:outline-primary-500 placeholder:text-primary-700/33 text-primary-800 w-full rounded-full border-2 border-none bg-white p-4" />

@@ -1,21 +1,77 @@
 ---
 interface Props {
   color?: 'primary' | 'secondary'
+  slug?: string
 }
 
-const { color = 'primary' } = Astro.props
+const { color = 'primary', slug } = Astro.props
 ---
 
-<div class:list={[
-  'rounded-full px-2 py-0.5 text-white w-fit',
-  color === 'primary' ? 'bg-primary-50' : 'bg-secondary-50',
-]}
->
-  <span class:list={[
-    'text-sm text-gray-500',
-    color === 'primary' ? 'text-primary-800' : 'text-secondary-800',
+{slug
+? (
+  <span
+    role="button"
+    tabindex="0"
+    class="interactive-label focus:ring-primary-500 relative z-10 inline-block cursor-pointer rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2"
+    data-href={`/categorieen/${slug}`}
+  >
+    <div class:list={[
+      'rounded-full px-2 py-0.5 text-white w-fit',
+      color === 'primary' ? 'bg-primary-50' : 'bg-secondary-50',
+      'hover:bg-primary-100 hover:text-primary-800 transition-all duration-300',
+    ]}
+    >
+      <span class:list={[
+        'text-sm text-gray-500',
+        color === 'primary' ? 'text-primary-800' : 'text-secondary-800',
+        'hover:text-primary-700',
+      ]}
+      >
+        <slot />
+      </span>
+    </div>
+  </span>
+)
+: (
+  <div class:list={[
+    'rounded-full px-2 py-0.5 text-white w-fit',
+    color === 'primary' ? 'bg-primary-50' : 'bg-secondary-50',
   ]}
   >
-    <slot />
-  </span>
-</div>
+    <span class:list={[
+      'text-sm text-gray-500',
+      color === 'primary' ? 'text-primary-800' : 'text-secondary-800',
+    ]}
+    >
+      <slot />
+    </span>
+  </div>
+)}
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const labels = document.querySelectorAll('.interactive-label')
+
+  labels.forEach((label) => {
+    const href = label.getAttribute('data-href')
+    if (!href)
+      return
+
+    // Handle click
+    label.addEventListener('click', (e) => {
+      e.stopPropagation()
+      e.preventDefault()
+      window.location.href = href
+    })
+
+    // Handle keyboard (Enter and Space)
+    label.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+        e.stopPropagation()
+        e.preventDefault()
+        window.location.href = href
+      }
+    })
+  })
+})
+</script>

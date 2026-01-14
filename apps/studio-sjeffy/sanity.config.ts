@@ -1,8 +1,9 @@
+import { colorInput } from '@sanity/color-input'
 import { visionTool } from '@sanity/vision'
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { schemaTypes } from './schemaTypes'
-import { colorInput } from '@sanity/color-input'
+import { structure } from './structure'
 
 export default defineConfig({
   name: 'default',
@@ -12,8 +13,8 @@ export default defineConfig({
   dataset: 'sjeffy-dataset',
 
   plugins: [
-    structureTool(), 
-    visionTool(), 
+    structureTool({ structure }),
+    visionTool(),
     colorInput(),
   ],
 

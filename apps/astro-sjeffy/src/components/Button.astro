@@ -1,0 +1,26 @@
+---
+interface Props {
+    label: string
+    href: string
+    variant?: 'solid' | 'outline' | 'ghost' | 'navitem'
+    color?: 'primary' | 'secondary'
+    size?: 'sm' | 'md' | 'lg'
+}
+
+const { label, href, variant = 'solid', color = 'primary' } = Astro.props
+---
+
+
+ <!-- TODO: Add styling for variants other than link -->
+<a
+  href={href}
+  class:list={[
+    'font-display text-display-sm rounded-md px-4 py-2 font-semibold',
+    variant === 'solid' && `bg-${color}-500 text-white`,
+    variant === 'outline' && `border border-${color}-500 text-${color}-500`,
+    variant === 'ghost' && `bg-transparent text-${color}-500`,
+    variant === 'navitem' && `font-display text-display-xs font-semibold text-primary-900 hover:text-primary-500 transition-colors`,
+]}
+>
+    {label}
+</a>

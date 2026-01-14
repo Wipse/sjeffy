@@ -1,0 +1,30 @@
+---
+import Recipehero from '../../components/sections/heros/Recipehero.astro'
+import IngredientsOverview from '../../components/sections/IngredientsOverview.astro'
+
+import Layout from '../../layouts/main.astro'
+import { getAllRecipes } from '../../queries'
+
+// Get all recipes and return the slug and the recipe
+export async function getStaticPaths() {
+  const recipes = await getAllRecipes()
+
+  return recipes.map(recipe => ({
+    params: { slug: recipe.slug.current },
+    props: { recipe },
+  }))
+}
+
+const { recipe } = Astro.props
+
+if (!recipe) {
+  return Astro.redirect('/404')
+}
+---
+
+<Layout title={`${recipe.name} | Sjeffy`} description={recipe.description || `Bekijk het recept voor ${recipe.name}`}>
+  <div class="bg-slate-50">
+    <Recipehero data={recipe} />
+    <IngredientsOverview data={recipe} />
+  </div>
+</Layout>

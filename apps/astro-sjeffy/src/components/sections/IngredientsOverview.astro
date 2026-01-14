@@ -1,0 +1,109 @@
+---
+import type { Recipe } from '../../types/recipe'
+import Checkbox from '../Checkbox.astro'
+import Heading from '../Heading.astro'
+
+interface Props {
+  data: Recipe
+}
+
+const { data } = Astro.props
+---
+
+<section>
+  <div class="relative grid grid-cols-4">
+    <!-- Content -->
+    <div class="container col-span-2 mx-auto px-4 py-8">
+        <Heading size="display-2xl" as="h2" class="mb-6 text-slate-950">
+        Ingrediënten
+        </Heading>
+
+        <ul class="flex flex-col gap-y-4">
+        {
+            data.ingredients?.map((ingredient, index) => {
+            const checkboxId = `${data.slug?.current}-ingredient-${index}`
+
+            return (
+                <li>
+                <label for={checkboxId} class="text-body-xl flex w-fit cursor-pointer items-center gap-x-3 pl-5 text-slate-950">
+                    <Checkbox id={checkboxId} />
+                    <span class="ingredient-text relative">{ingredient}</span>
+                </label>
+                </li>
+            )
+            })
+        }
+        </ul>
+    </div>
+
+    <!-- Image -->
+    <div class="col-span-2 flex size-[70vh] items-center justify-center">
+      {data.additionalImageUrl
+? (
+        <img
+          id="rotating-recipe-image"
+          src={data.additionalImageUrl}
+          alt={data.name}
+          class="h-auto w-full"
+        />
+        )
+: (
+          <div class="flex size-full items-center justify-center">
+            <p>Geen afbeelding gevonden</p>
+          </div>
+        )}
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+  // Register ScrollTrigger plugin
+  gsap.registerPlugin(ScrollTrigger)
+
+  // Wait for DOM to be ready
+  document.addEventListener('DOMContentLoaded', () => {
+    const image = document.querySelector('#rotating-recipe-image')
+
+    if (image) {
+      gsap.to(image, {
+        rotation: 60,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: image,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      })
+    }
+  })
+</script>
+
+<style>
+  .ingredient-text {
+    position: relative;
+    display: inline-block;
+  }
+
+  .ingredient-text::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 3px;
+    width: 0%;
+    background-color: #c7853e;
+    border-radius: 100px;
+    transform: translateY(-50%);
+    transition: width 400ms ease-out;
+  }
+
+  /* Show line when checkbox is checked */
+  input[type="checkbox"]:checked ~ .ingredient-text::after,
+  label:has(input[type="checkbox"]:checked) .ingredient-text::after {
+    width: 100%;
+  }
+</style>
