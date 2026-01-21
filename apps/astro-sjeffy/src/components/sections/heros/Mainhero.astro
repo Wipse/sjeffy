@@ -1,17 +1,19 @@
 ---
+import type { Recipe } from '../../../types/Recipe'
 import Heading from '../../Heading.astro'
 import Searchbar from '../../Searchbar.astro'
 
 interface Props {
   title: string
+  recipes: Recipe[]
 }
 
-const { title } = Astro.props
+const { title, recipes } = Astro.props
 ---
 
-<section class="py-section-xl bg-primary-50">
-  <div class="container mx-auto flex flex-col gap-y-4">
+<section class="py-section-xl bg-primary-50 grid grid-cols-1 gap-4 md:grid-cols-12">
+  <div class="container mx-auto flex flex-col gap-y-4 md:col-span-10 md:col-start-2">
     <Heading size="display-2xl" as="h1" class="text-primary-600">{title}</Heading>
-    <Searchbar />
+    <Searchbar recipes={recipes} />
   </div>
 </section>

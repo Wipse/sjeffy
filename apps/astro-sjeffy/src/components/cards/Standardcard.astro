@@ -15,7 +15,10 @@ const { recipe, color = 'primary', interactiveLabels = false } = Astro.props
 ---
 <a
   href={`/recepten/${recipe.slug.current}`}
-  class="focus:ring-primary-500 max-w-130 block min-w-80 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-4"
+  class:list={[
+    'focus:ring-primary-500 max-w-130 block min-w-80 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-4',
+    color === 'primary' ? 'focus:ring-primary-500' : 'focus:ring-secondary-500',
+  ]}
 >
   <article class="group gap-y-4">
     <!-- Image -->
@@ -47,7 +50,7 @@ const { recipe, color = 'primary', interactiveLabels = false } = Astro.props
         <div class="mb-1 flex flex-wrap gap-2">
           {recipe.categories.map(category => (
             <Label
-              color="primary"
+              color={color}
               slug={interactiveLabels ? category.slug.current : undefined}
             >
               {category.name}
@@ -60,7 +63,7 @@ const { recipe, color = 'primary', interactiveLabels = false } = Astro.props
         size="display-md"
         class:list={[
           'font-bold group-hover:underline',
-          color === 'primary' ? 'text-primary-900' : 'text-secondary-900',
+          color === 'primary' ? 'text-primary-900 decoration-primary-900' : 'text-secondary-900 decoration-secondary-900',
         ]}
       >
         {recipe.name}

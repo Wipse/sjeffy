@@ -8,7 +8,10 @@ const recipes = await getAllRecipes()
 ---
 
 <Layout title="Sjeffy | Recepten" description="Ontdek heerlijke recepten voor elke gelegenheid">
-  <Mainhero title="What's Cooking, Good Looking?" />
+  <Mainhero
+    title="What's Cooking, Good Looking?"
+    recipes={recipes}
+  />
   <CardGrid
     headingText="Meest bekeken"
     recipes={recipes}

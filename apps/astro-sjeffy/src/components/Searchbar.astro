@@ -1,9 +1,154 @@
 ---
+import type { Recipe } from '../types/Recipe'
+import ListCard from './cards/ListCard.astro'
+
 interface Props {
+  recipes: Recipe[]
   placeholder?: string
 }
 
-const { placeholder = 'Zoek een recept...' } = Astro.props
+const { recipes, placeholder = 'Zoek een recept...' } = Astro.props
 ---
 
-<input type="text" placeholder={placeholder} class="focus:outline-primary-500 placeholder:text-primary-700/33 text-primary-800 w-full rounded-full border-2 border-none bg-white p-4" />
+<div>
+  <input
+    id="search-input"
+    type="text"
+    placeholder={placeholder}
+    class="focus:outline-primary-500 placeholder:text-primary-700/33 text-primary-800 w-full rounded-3xl bg-white p-4 transition-all"
+  />
+
+  <div
+    id="search-results"
+    class="hidden rounded-b-3xl bg-white px-4 pt-4"
+  >
+    <ul id="results-list" class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      {
+        recipes.map(recipe => (
+          <li
+            class="search-result-item mb-4"
+            data-recipe-data={JSON.stringify({
+              name: recipe.name,
+              ingredients: recipe.ingredients || [],
+              categories: recipe.categories?.map(c => c.name) || [],
+            })}
+          >
+            <ListCard recipe={recipe} />
+          </li>
+        ))
+      }
+    </ul>
+
+    <p id="no-results" class="hidden py-8 text-center text-gray-500">
+      Geen recepten gevonden
+    </p>
+  </div>
+</div>
+
+
+<script>
+const searchInput = document.getElementById('search-input')
+const searchResults = document.getElementById('search-results')
+const noResults = document.getElementById('no-results')
+const allResultItems = document.querySelectorAll('.search-result-item')
+
+let debounceTimeout: ReturnType<typeof setTimeout> | undefined
+
+/**
+ * Update searchbar styling based on dropdown visibility
+ */
+function updateSearchbarStyling(dropdownVisible: boolean) {
+  if (!searchInput) {
+    return
+  }
+
+  if (dropdownVisible) {
+    searchInput.classList.remove('rounded-3xl')
+    searchInput.classList.add('rounded-t-3xl', 'border-b', 'border-gray-200')
+  }
+  else {
+    searchInput.classList.remove('rounded-t-3xl', 'border-b', 'border-gray-200')
+    searchInput.classList.add('rounded-3xl')
+  }
+}
+
+/**
+ * Filter the recipes based on the search term
+ * @param searchTerm - The search term to filter the recipes by
+ */
+function filterRecipes(searchTerm: string) {
+  if (!searchResults) {
+    return
+  }
+
+  if (!searchTerm || searchTerm.length < 2) {
+    searchResults.classList.add('hidden')
+    updateSearchbarStyling(false)
+    return
+  }
+
+  const term = searchTerm.toLowerCase()
+
+  let visibleCount = 0
+
+  allResultItems.forEach((item) => {
+    const dataAttr = item.getAttribute('data-recipe-data')
+
+    if (!dataAttr) {
+      return
+    }
+
+    const recipeData = JSON.parse(dataAttr)
+
+    const name = recipeData.name?.toLowerCase() || ''
+    const ingredients = recipeData.ingredients?.join(' ').toLowerCase() || ''
+    const categories = recipeData.categories?.join(' ').toLowerCase() || ''
+
+    const matches
+      = name.includes(term)
+        || ingredients.includes(term)
+        || categories.includes(term)
+
+    if (matches) {
+      item.classList.remove('hidden')
+      visibleCount++
+    }
+    else {
+      item.classList.add('hidden')
+    }
+  })
+
+  if (visibleCount > 0) {
+    noResults?.classList.add('hidden')
+  }
+  else {
+    noResults?.classList.remove('hidden')
+  }
+
+  searchResults.classList.remove('hidden')
+  updateSearchbarStyling(true)
+}
+
+// Debounce the input event
+if (searchInput) {
+  searchInput.addEventListener('input', (e) => {
+    clearTimeout(debounceTimeout)
+
+    const target = e.target as HTMLInputElement
+
+    debounceTimeout = setTimeout(() => {
+      filterRecipes(target.value)
+    }, 300)
+  })
+}
+
+// Close the search results when clicking outside of the searchbar
+document.addEventListener('click', (e) => {
+  const target = e.target as Node
+
+  if (searchInput && searchResults && !searchInput.contains(target) && !searchResults.contains(target)) {
+    searchResults.classList.add('hidden')
+    updateSearchbarStyling(false)
+  }
+})
+</script>

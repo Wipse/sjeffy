@@ -1,0 +1,79 @@
+---
+import type { Recipe } from '../../types'
+import Heading from '../Heading.astro'
+import Label from '../Label.astro'
+
+interface Props {
+  recipe: Recipe
+  color?: 'primary' | 'secondary'
+}
+
+const { recipe, color = 'primary' } = Astro.props
+---
+<a
+  href={`/recepten/${recipe.slug.current}`}
+  class="focus:ring-primary-500 block w-fit rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-4"
+>
+  <article class="group flex items-center gap-x-4">
+    <!-- Image -->
+    <div>
+      {recipe.mainImageUrl
+        ? (
+          <div class="overflow-hidden rounded-lg">
+            <img
+              src={recipe.mainImageUrl}
+              alt={recipe.name}
+              class="aspect-4/3 h-30 min-w-40 shrink-0 rounded-lg object-cover transition-all duration-300 group-hover:scale-105"
+            />
+          </div>
+        )
+     : (
+        <div class="overflow-hidden rounded-lg">
+          <img
+            src="https://placehold.co/600x400"
+            alt="Placeholder"
+            class="aspect-4/3 h-30 min-w-40 shrink-0 rounded-lg object-cover transition-all duration-300 group-hover:scale-105"
+          />
+        </div>
+      )}
+    </div>
+
+    <!-- Content -->
+    <div class="flex flex-col gap-y-1 p-4">
+
+      <!-- Categories -->
+      {recipe.categories && recipe.categories.length > 0 && (
+        <div class="mb-1 mt-2 flex flex-wrap gap-2">
+          {recipe.categories.map(category => (
+            <Label
+              color={color}
+              size="sm"
+            >
+              {category.name}
+            </Label>
+          ))}
+        </div>
+      )}
+
+      <!-- Name -->
+      <Heading
+        as="h3"
+        size="display-sm"
+        class:list={[
+          'font-bold group-hover:underline',
+          color === 'primary' ? 'text-primary-900' : 'text-secondary-900',
+        ]}
+      >
+        {recipe.name}
+      </Heading>
+
+      <!-- Description -->
+      {recipe.description && (
+        <p class="line-clamp-2 text-sm text-gray-700">
+          {recipe.description}
+        </p>
+      )}
+
+    </div>
+  </article>
+</a>
